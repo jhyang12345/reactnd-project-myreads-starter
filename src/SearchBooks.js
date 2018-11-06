@@ -1,9 +1,12 @@
 import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
+import Book from './Book.js'
+import {search} from './BooksAPI'
 
 class SearchBooks extends Component {
   state = {
     searchText: "",
+    searchResults : [],
   }
 
   handleInputChange = (evt) => {
@@ -11,15 +14,20 @@ class SearchBooks extends Component {
     this.setState({
       searchText : value.trim(),
     })
-    console.log(value);
+    search(value)
+      .then((books) => {
+        console.log(books);
+        this.setState(() => ({
+          searchResults : books,
+        }))
+      })
   }
 
   render() {
-    const {searchText} = this.state;
+    const {searchText, searchResults} = this.state;
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link to="/">Close</Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -33,9 +41,16 @@ class SearchBooks extends Component {
               onChange={this.handleInputChange}
               value={searchText}/>
           </div>
+          <Link to="/">Close</Link>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid"></ol>
+          <ol className="books-grid">
+            {searchResults.map((book) => (
+              <Book
+                key={book.id}
+                book={book} />
+              ))}
+          </ol>
         </div>
       </div>
     )
