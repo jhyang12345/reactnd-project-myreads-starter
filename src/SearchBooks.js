@@ -16,10 +16,11 @@ class SearchBooks extends Component {
     })
     search(value)
       .then((books) => {
-        console.log(books);
-        this.setState(() => ({
-          searchResults : books,
-        }))
+        if(books) {
+          this.setState(() => ({
+            searchResults : books,
+          }))
+        }
       })
   }
 
