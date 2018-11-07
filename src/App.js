@@ -3,17 +3,43 @@ import React from 'react'
 import './App.css'
 import { Route, Link } from 'react-router-dom'
 import SearchBooks from './SearchBooks'
+import BookShelf from './BookShelf'
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
+    books: [],
   }
+
+  addBookToShelf = (book, value) => {
+    book.shelf = value
+    for(let bookIn of this.state.books) {
+      if(bookIn.id === book.id) return;
+    }
+    this.setState((prevState) => ({
+      books: [...prevState.books, book],
+    }))
+    console.log(this.state.books);
+  }
+
+  moveBookToShelf = (bookFrom, value) => {
+    for(let book of this.state.books) {
+      if(book.id === bookFrom.id) {
+        book.shelf = value;
+        break;
+      }
+    }
+    this.setState(this.state);
+  }
+
+  filterBooks = (value) => {
+    return this.state.books.filter(book => book.shelf === value);
+  }
+
+  // <option value="move" disabled>Move to...</option>
+  // <option value="currentlyReading">Currently Reading</option>
+  // <option value="wantToRead">Want to Read</option>
+  // <option value="read">Read</option>
+  // <option value="none">None</option>
 
   render() {
     return (
@@ -25,29 +51,24 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Want to Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-                    </ol>
-                  </div>
-                </div>
-                <div className="bookshelf">
-                  <h2 className="bookshelf-title">Read</h2>
-                  <div className="bookshelf-books">
-                    <ol className="books-grid">
-
-                    </ol>
-                  </div>
-                </div>
+                <BookShelf
+                  text={"Currently Reading"}
+                  value={"currentlyReading"}
+                  bookCallback={this.moveBookToShelf}
+                  books={this.filterBooks("currentlyReading")}
+                  />
+                <BookShelf
+                  text={"Want to Read"}
+                  value={"wantToRead"}
+                  bookCallback={this.moveBookToShelf}
+                  books={this.filterBooks("wantToRead")}
+                  />
+                <BookShelf
+                  text={"Read"}
+                  value={"read"}
+                  bookCallback={this.moveBookToShelf}
+                  books={this.filterBooks("read")}
+                  />
               </div>
             </div>
             <div className="open-search">
@@ -56,7 +77,7 @@ class BooksApp extends React.Component {
           </div>
         )} />
         <Route exact path='/search' render={() => (
-          <SearchBooks />
+          <SearchBooks bookCallback={this.addBookToShelf}/>
         )} />
       </div>
     )

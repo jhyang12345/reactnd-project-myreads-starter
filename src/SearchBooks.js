@@ -16,7 +16,7 @@ class SearchBooks extends Component {
     })
     search(value)
       .then((books) => {
-        if(books) {
+        if(Array.isArray(books)) {
           this.setState(() => ({
             searchResults : books,
           }))
@@ -26,6 +26,8 @@ class SearchBooks extends Component {
 
   render() {
     const {searchText, searchResults} = this.state;
+    const {bookCallback} = this.props;
+    const selectedState = "none";
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -48,7 +50,9 @@ class SearchBooks extends Component {
           <ol className="books-grid">
             {searchResults.map((book) => (
               <Book
+                bookCallback={bookCallback}
                 key={book.id}
+                selectedState={selectedState}
                 book={book} />
               ))}
           </ol>

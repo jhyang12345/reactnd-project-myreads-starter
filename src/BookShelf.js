@@ -7,30 +7,22 @@ import Book from './Book.js'
 // <option value="read">Read</option>
 class BookShelf extends Component {
 
-  state: {
-    books: [],
-  }
-
-  const insertBook = (book) => {
-    this.setState((currentState) => ({
-      books: currentState.books.concat([book]),
-    }))
-  }
 
   render() {
-    const {value, text} = this.props;
-    const {books} = this.state;
+    const {value, text, books, bookCallback} = this.props;
     return (
-      <div className="bookshelf">
-        <h2 className="bookshelf-title">Currently Reading</h2>
+      <div className="bookshelf" key={value}>
+        <h2 className="bookshelf-title">{text}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             {books.map((book, index) => (
               <Book
                 key={book.id}
-                book={book} />
+                book={book}
+                bookCallback={bookCallback}
+                selectedState={value}
+                 />
               ))}
-            ))}
           </ol>
         </div>
       </div>

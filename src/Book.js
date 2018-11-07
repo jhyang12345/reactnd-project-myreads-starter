@@ -1,15 +1,16 @@
 import React, {Component} from 'react'
 
 class Book extends Component {
-  state = {
-    id : '1234',
-    coverUrl : 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")',
-    bookTitle: "",
-    bookAuthors: "",
+
+  bookCallback = (evt) => {
+    const {value} = evt.target;
+    this.props.bookCallback(this.props.book, value);
+    console.log("book selected");
   }
 
   // id, authors, title, cover
   render() {
+    const {selectedState} = this.props;
     let {authors, title} = this.props.book;
     const cover = this.props.book.imageLinks.thumbnail;
     return (
@@ -18,7 +19,7 @@ class Book extends Component {
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${cover})`}}></div>
             <div className="book-shelf-changer">
-              <select>
+              <select value={selectedState} onChange={this.bookCallback}>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
