@@ -76,8 +76,11 @@ class BooksApp extends React.Component {
             </div>
           </div>
         )} />
-        <Route exact path='/search' render={() => (
-          <SearchBooks bookCallback={this.addBookToShelf}/>
+      <Route exact path='/search' render={({history}) => (
+          <SearchBooks bookCallback={(book, value) => {
+              this.addBookToShelf(book, value)
+              history.push('/')
+            }}/>
         )} />
       </div>
     )
