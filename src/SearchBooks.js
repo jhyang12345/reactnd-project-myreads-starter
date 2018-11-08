@@ -9,6 +9,17 @@ class SearchBooks extends Component {
     searchResults : [],
   }
 
+  setSearchResultShelves = (books) => {
+    for(let bookNew of books) {
+      for(let bookOrigin of this.props.books) {
+        if(bookNew.id == bookOrigin.id) {
+          bookNew.shelf = bookOrigin.shelf;
+        }
+      }
+    }
+    return books;
+  }
+
   handleInputChange = (evt) => {
     const {value} = evt.target;
     this.setState({
@@ -18,7 +29,7 @@ class SearchBooks extends Component {
       .then((books) => {
         if(Array.isArray(books)) {
           this.setState(() => ({
-            searchResults : books,
+            searchResults : this.setSearchResultShelves(books),
           }))
         } else {
           this.setState(() => ({
@@ -31,7 +42,6 @@ class SearchBooks extends Component {
   render() {
     const {searchText, searchResults} = this.state;
     const {bookCallback} = this.props;
-    const selectedState = "none";
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -56,8 +66,9 @@ class SearchBooks extends Component {
               <Book
                 bookCallback={bookCallback}
                 key={book.id}
-                selectedState={selectedState}
-                book={book} />
+                book={book}
+                selectedState={book.shelf}
+                />
               ))}
           </ol>
         </div>

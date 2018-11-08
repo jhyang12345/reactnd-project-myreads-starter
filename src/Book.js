@@ -10,7 +10,7 @@ class Book extends Component {
 
   // id, authors, title, cover
   render() {
-    const {selectedState} = this.props;
+    let {selectedState, book} = this.props;
     let {authors, title} = this.props.book;
     let cover;
     if(this.props.book.imageLinks) {
@@ -18,7 +18,8 @@ class Book extends Component {
     } else {
       cover = null;
     }
-
+    console.log(title, selectedState);
+    if(!selectedState) selectedState = "none"
     return (
       <li>
         <div className="book">

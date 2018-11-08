@@ -29,6 +29,7 @@ class BooksApp extends React.Component {
     update(book, value).then(() => {
       this.reloadShelves()
     })
+    console.log(book.title, "added");
   }
 
   moveBookToShelf = (bookFrom, value) => {
@@ -86,7 +87,8 @@ class BooksApp extends React.Component {
           <SearchBooks bookCallback={(book, value) => {
               this.addBookToShelf(book, value)
               history.push('/')
-            }}/>
+            }}
+            books={this.state.books}/>
         )} />
       </div>
     )
