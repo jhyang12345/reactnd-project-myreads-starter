@@ -20,6 +20,10 @@ class SearchBooks extends Component {
           this.setState(() => ({
             searchResults : books,
           }))
+        } else {
+          this.setState(() => ({
+            searchResults : [],
+          }))
         }
       })
   }

@@ -12,7 +12,13 @@ class Book extends Component {
   render() {
     const {selectedState} = this.props;
     let {authors, title} = this.props.book;
-    const cover = this.props.book.imageLinks.thumbnail;
+    let cover;
+    if(this.props.book.imageLinks) {
+      cover = this.props.book.imageLinks.thumbnail;
+    } else {
+      cover = null;
+    }
+
     return (
       <li>
         <div className="book">

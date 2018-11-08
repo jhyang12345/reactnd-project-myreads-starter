@@ -4,31 +4,37 @@ import './App.css'
 import { Route, Link } from 'react-router-dom'
 import SearchBooks from './SearchBooks'
 import BookShelf from './BookShelf'
+import {getAll, update} from './BooksAPI'
 
 class BooksApp extends React.Component {
   state = {
     books: [],
   }
 
+  componentDidMount() {
+    this.reloadShelves()
+  }
+
+  reloadShelves = () => {
+    getAll().then((books) => {
+      if(Array.isArray(books)) {
+        this.setState(() => ({
+          books : books,
+        }))
+      }
+    })
+  }
+
   addBookToShelf = (book, value) => {
-    book.shelf = value
-    for(let bookIn of this.state.books) {
-      if(bookIn.id === book.id) return;
-    }
-    this.setState((prevState) => ({
-      books: [...prevState.books, book],
-    }))
-    console.log(this.state.books);
+    update(book, value).then(() => {
+      this.reloadShelves()
+    })
   }
 
   moveBookToShelf = (bookFrom, value) => {
-    for(let book of this.state.books) {
-      if(book.id === bookFrom.id) {
-        book.shelf = value;
-        break;
-      }
-    }
-    this.setState(this.state);
+    update(bookFrom, value).then(() => {
+      this.reloadShelves()
+    })
   }
 
   filterBooks = (value) => {
